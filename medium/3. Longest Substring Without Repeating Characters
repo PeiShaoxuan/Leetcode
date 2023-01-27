@@ -1,0 +1,33 @@
+PROBLEMS
+
+Given a string s, find the length of the longest substring without repeating characters.
+
+Example 1:
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+**********************************************************************************
+SOLUTION(BEST) Sliding Window
+
+int lengthOfLongestSubstring(char * s){
+    int l=strlen(s);
+    int left=0,right=0,res=0,count=0;
+    int temp[128]={0};
+    while(right<l){
+        if(temp[s[right]]==0)
+        {
+            temp[s[right]]=1;
+            count++;
+            right++;
+            if(count>res)
+                res=count;
+        }
+        else
+        {
+            temp[s[left]]=0;
+            left++;
+            count--;
+        }
+    }
+    return res;
+}
