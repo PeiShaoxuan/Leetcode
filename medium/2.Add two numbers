@@ -1,11 +1,172 @@
 PRBLEMS
-You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
+You are given two non-empty linked lists representing two non-negative integers. The digits are 
+stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
 
 You may assume the two numbers do not contain any leading zero, except the number 0 itself.
-![Image text](Gphoto/2.jpg)
+
+reverse order: 7->3->5 (537)
 
 Example 1:
 Input: l1 = [2,4,3], l2 = [5,6,4]
 Output: [7,0,8]
 Explanation: 342 + 465 = 807.
 ***************************************************************************************
+SOLUTION 1(MY)
+
+struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2){
+    struct ListNode* ret=NULL;
+    struct ListNode* p1=l1;
+    struct ListNode* p2=l2;
+    struct ListNode* p3=NULL;
+    int carry=0;
+    for(;p1!=NULL&&p2!=NULL;p1=p1->next,p2=p2->next)
+    {
+        struct ListNode* now=(struct ListNode*)malloc(sizeof(struct ListNode));
+        now->val=(p1->val+p2->val+carry)%10;
+        carry=(p1->val+p2->val+carry)/10;
+        now->next=NULL;
+        if(ret==NULL)
+        {
+            ret=now;
+        }
+        else
+        {
+            p3->next=now;
+        }
+        p3=now;
+    }
+    if(p1!=NULL)
+    {
+        if(carry!=0)
+        {
+            for(;p1!=NULL;p1=p1->next)
+            {
+                struct ListNode* now=(struct ListNode*)malloc(sizeof(struct ListNode));
+                now->val=(p1->val+carry)%10;
+                carry=(p1->val+carry)/10;
+                now->next=NULL;
+                p3->next=now;
+                p3=now;
+            }
+            if(carry!=0)
+            {
+                struct ListNode* now=(struct ListNode*)malloc(sizeof(struct ListNode));
+                p3->next=now;
+                now->val=carry;
+                now->next=NULL;
+            }
+        }
+        else
+        {
+            p3->next=p1;
+        }
+    }
+    else if(p2!=NULL)
+    {
+        if(carry!=0)
+        {
+            for(;p2!=NULL;p2=p2->next)
+            {
+                struct ListNode* now=(struct ListNode*)malloc(sizeof(struct ListNode));
+                now->val=(p2->val+carry)%10;
+                carry=(p2->val+carry)/10;
+                now->next=NULL;
+                p3->next=now;
+                p3=now;
+            }
+            if(carry!=0)
+            {
+                struct ListNode* now=(struct ListNode*)malloc(sizeof(struct ListNode));
+                p3->next=now;
+                now->val=carry;
+                now->next=NULL;
+            }
+        }
+        else
+        {
+            p3->next=p2;
+        }
+    }
+    else
+    {
+        if(carry!=0)
+        {
+            struct ListNode* now=(struct ListNode*)malloc(sizeof(struct ListNode));
+            p3->next=now;
+            now->val=carry;
+            now->next=NULL;
+        }
+        if(ret==NULL)
+        {
+            struct ListNode* now=(struct ListNode*)malloc(sizeof(struct ListNode));
+            ret=now;
+            now->next=NULL;
+            now->val=0;
+        }
+    }
+    return ret;
+}
+**************************************************************************
+SOLUTION 2(BEST)
+
+struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2){
+struct ListNode *tmp=NULL,*head=NULL,*tail=NULL;
+int r =0;
+while(l1 || l2)
+{
+    int sum = r;
+    if(l1)
+    {
+        sum += l1->val;
+        l1 = l1->next;
+    }
+    if(l2)
+    {
+        sum += l2->val;
+        l2 = l2->next;
+    }
+    r = sum/10;
+    sum%=10;
+    tmp = malloc(sizeof(struct ListNode));
+    tmp->val = sum;
+    tmp->next =NULL;
+    if(!head)
+    {
+        head = tmp;
+        tail =tmp;
+    }
+    else{
+    tail->next = tmp;
+    tail = tail->next;
+    }
+}
+ if(r>0)
+    {
+        tmp = malloc(sizeof(struct ListNode));
+        tmp->val = r;
+        tmp->next =NULL;
+        tail->next = tmp;
+    }
+    return head;
+}
+*************************************************************************************************************
+COMPARISON
+Instead of first adding two both of whose pointers are not NULL and then adding the rest, it's better to process 
+in one while loop by seeing if l1 or l2 is NULL in the loop one by noe, we only need to add lx when lx is not NULL.
+So the use of time can be redueced greatly.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
