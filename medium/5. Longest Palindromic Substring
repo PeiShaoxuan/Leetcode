@@ -1,0 +1,76 @@
+PROBLEMS
+
+Given a string s, return the longest 
+palindromic substring in s.
+
+Example 1:
+Input: s = "babad"
+Output: "bab"
+Explanation: "aba" is also a valid answer.
+*******************************************************************************************************
+SOLUTION(BEST)
+
+char * longestPalindrome(char * s){
+    int i,count,recl=0,recr=0,left,right;  //Initialize recl and recr is very important!!
+    int mcount=0;                          //It's possible that the program will not get into the loop
+    int l=strlen(s);                       //And when recl and recr is used after the loop, it will be 
+    for(i=0;i<l-1;i++)                     //wrong.
+    {
+        if(s[i]==s[i+1])
+        {   
+            count=2;
+            for(left=i-1,right=i+2;left>=0&&right<l;left--,right++)
+            {
+                if(s[left]==s[right])
+                {
+                    count+=2;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if(mcount<count)         //Instead of putting this into the for loop above, this way can
+            {                        // reduce the use of time
+                mcount=count;            
+                recl=++left;            
+                recr=--right;         
+            }                        
+        }
+        if(i==l-2)
+        {
+            break;
+        }
+        if(s[i]==s[i+2])
+        {
+            count=3;
+            for(left=i-1,right=i+3;left>=0&&right<l;left--,right++)
+            {
+                if(s[left]==s[right])
+                {
+                    count+=2;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if(mcount<count)
+            {
+                mcount=count;
+                recl=++left;
+                recr=--right;
+            }
+        }
+    }
+    if(recr!=l-1)                // Important!!Ensure recr+1 will not be overflow
+    {
+        s[recr+1]='\0';
+    }
+    return (s+recl);
+}
+******************************************************************************************
+MAIN THINKING
+
+Considering the fact that the minimal unit of every palindromic substring must be like 'xx' or 'xyx', so based on this, we only need to extend further
+while looking through the entire array.
